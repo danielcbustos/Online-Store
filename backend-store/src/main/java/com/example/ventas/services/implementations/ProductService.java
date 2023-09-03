@@ -14,8 +14,6 @@ import com.example.ventas.entities.Product;
 import com.example.ventas.repositories.contracts.IProductRepository;
 import com.example.ventas.services.contracts.IProductService;
 
-import jakarta.el.ELException;
-
 @Service
 public class ProductService implements IProductService {
     private static final Logger logger = LogManager.getLogger(ProductService.class);
@@ -46,6 +44,7 @@ public class ProductService implements IProductService {
     public ResponseEntity<Product> create(Product product) {
         try {
             Product productSaves = this.productRepository.save(product);
+            // System.out.println("xxxxxxxxxxxx" + productSaves.getCategory().getId());
             return new ResponseEntity<Product>(productSaves, HttpStatus.CREATED);
 
         } catch (Exception e) {
