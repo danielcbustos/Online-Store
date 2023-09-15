@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,13 +44,13 @@ public class ProductController {
         return this.productService.create(product);
     }
 
-    @PutMapping("/update")
-    private ResponseEntity<Product> updateProduct(@RequestBody Product product) {
-        return this.productService.update(product);
+    @PutMapping("/update/{id}")
+    private ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
+        return this.productService.update(id, product);
     }
 
-    @DeleteMapping("/delete")
-    private ResponseEntity<Boolean> deleteProduct(@RequestParam Long id) {
+    @DeleteMapping("/delete/{id}")
+    private ResponseEntity<Boolean> deleteProduct(@PathVariable Long id) {
         return this.productService.delete(id);
     }
 }

@@ -11,7 +11,7 @@ public interface IProductService {
 
     public ResponseEntity<Product> create(Product product);
 
-    public ResponseEntity<Product> update(Product product);
+    public ResponseEntity<Product> update(Long id, Product product);
 
     public ResponseEntity<Boolean> delete(Long id);
 

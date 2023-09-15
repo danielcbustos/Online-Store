@@ -1,6 +1,7 @@
 package com.example.ventas.services.implementations;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,7 +45,6 @@ public class ProductService implements IProductService {
     public ResponseEntity<Product> create(Product product) {
         try {
             Product productSaves = this.productRepository.save(product);
-            // System.out.println("xxxxxxxxxxxx" + productSaves.getCategory().getId());
             return new ResponseEntity<Product>(productSaves, HttpStatus.CREATED);
 
         } catch (Exception e) {
@@ -55,10 +55,20 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public ResponseEntity<Product> update(Product product) {
+    public ResponseEntity<Product> update(Long id, Product product) {
         try {
-            Product productUpdated = this.productRepository.save(product);
-            return new ResponseEntity<Product>(productUpdated, HttpStatus.OK);
+            Optional<Product> existingProduct = this.productRepository.findById(id);
+            if (existingProduct.isPresent()) {
+                Product updProduct = existingProduct.get();
+                updProduct.setName(product.getName());
+                updProduct.setPrice(product.getPrice());
+                updProduct.setCategories(product.getCategories());
+                Product productUpdated = this.productRepository.save(updProduct);
+                return new ResponseEntity<Product>(productUpdated, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
+            }
+
         } catch (Exception e) {
             return new ResponseEntity<Product>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -1,6 +1,8 @@
 package com.example.ventas.services.implementations;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,13 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.ventas.entities.Category;
-import com.example.ventas.repositories.contracts.ICategoryRespository;
+import com.example.ventas.repositories.contracts.ICategoryRepository;
 import com.example.ventas.services.contracts.ICategoryService;
 
 @Service
 public class CategoryService implements ICategoryService {
     @Autowired
-    private ICategoryRespository categoryRepository;
+    private ICategoryRepository categoryRepository;
 
     @Override
     public ResponseEntity<List<Category>> findAll() {
@@ -41,11 +43,20 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public ResponseEntity<Category> update(Category category) {
+    public ResponseEntity<Category> update(Long id, Category category) {
         try {
-            Category categoryUpdated = this.categoryRepository.save(category);
-            return new ResponseEntity<Category>(categoryUpdated, HttpStatus.OK);
+            Optional<Category> existingCategory = this.categoryRepository.findById(id);
+            if (existingCategory.isPresent()) {
+                Category updCategory = existingCategory.get();
+                updCategory.setName(category.getName());
+                Category categoryUpdated = this.categoryRepository.save(updCategory);
+                return new ResponseEntity<Category>(categoryUpdated, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<Category>(HttpStatus.NOT_FOUND);
+            }
+
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return new ResponseEntity<Category>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

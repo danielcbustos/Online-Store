@@ -11,37 +11,35 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.ventas.entities.Category;
-import com.example.ventas.services.contracts.ICategoryService;
+import com.example.ventas.entities.Client;
+import com.example.ventas.services.contracts.IClientService;
 
 @RestController
-@RequestMapping("/category")
-public class CategoryController {
+@RequestMapping("/client")
+public class ClientController {
 
     @Autowired
-    private ICategoryService categoryService;
+    private IClientService clientService;
 
     @GetMapping("/list")
-    private ResponseEntity<List<Category>> getAllCategory() {
-        return this.categoryService.findAll();
+    private ResponseEntity<List<Client>> getAllClients() {
+        return this.clientService.findAll();
     }
 
     @PostMapping("/create")
-    private ResponseEntity<Category> createCategory(@RequestBody Category category) {
-        return this.categoryService.create(category);
+    private ResponseEntity<Client> createUser(@RequestBody Client client) {
+        return this.clientService.create(client);
     }
 
     @PutMapping("/update/{id}")
-    private ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category category) {
-        return this.categoryService.update(id, category);
+    private ResponseEntity<Client> updateClient(@PathVariable Long id, @RequestBody Client client) {
+        return this.clientService.update(id, client);
     }
 
     @DeleteMapping("/delete/{id}")
-    private ResponseEntity<Boolean> deleteCategory(@PathVariable Long id) {
-        return this.categoryService.delete(id);
+    private ResponseEntity<Boolean> deleteClient(@PathVariable Long id) {
+        return this.clientService.delete(id);
     }
-
 }
